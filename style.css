@@ -29,7 +29,7 @@ body{
     height: 4px;
     background-color: red;
     position: absolute;
-    width: 80px;
+    width: 64px;
     left:0px;
     top:52px;
     padding:0px;
@@ -39,4 +39,8 @@ body{
     display: flex;
     justify-content: space-between;
     padding: 1em;
+}
+
+.task-done{
+    text-decoration: line-through;
 }
