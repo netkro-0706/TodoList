@@ -13,9 +13,19 @@
 let taskInput = document.getElementById("task-input");
 let addButton = document.getElementById("add-button");
 let taskList = [];
+let underLine = document.getElementById("under-line");
+let menubarList = document.querySelectorAll(".task-item");
 
 addButton.addEventListener("click", addTask);
 
+menubarList.forEach(menu=>menu.addEventListener("click", (e)=>menuIndicator(e)));
+
+function menuIndicator(e){
+    underLine.style.width = e.currentTarget.offsetWidth + "px";
+    underLine.style.top = e.currentTarget.offsetTop + e.currentTarget.offsetHeight + "px";
+    underLine.style.left = e.currentTarget.offsetLeft + "px";
+    console.log(e.currentTarget.offsetTop, " : ", e.currentTarget.offsetHeight);
+}
 
 function addTask(){
     let task = {
@@ -38,7 +48,7 @@ function render(){
         `<div class="task">
             <div class="task-content task-done">${taskList[i].taskContent}</div>
             <div class="button-wrap">
-            <div class="fa-solid fa-circle-check toggle-button" onclick="toggleComplete('${taskList[i].id}')"></div>
+            <div class="fa-solid fa-arrow-rotate-left toggle-button" onclick="toggleComplete('${taskList[i].id}')"></div>
             <div class="fa-solid fa-trash-can delete-button" onclick="deleteTask('${taskList[i].id}')"></div>
             </div>
         </div>`
