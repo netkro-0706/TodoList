@@ -13,21 +13,53 @@
 let taskInput = document.getElementById("task-input");
 let addButton = document.getElementById("add-button");
 let taskList = [];
+let filterList = [];
 let underLine = document.getElementById("under-line");
 let menubarList = document.querySelectorAll(".task-item");
+let mode = "item-all";
 
 addButton.addEventListener("click", addTask);
-
+taskInput.addEventListener("keyup", function(e){
+    if(e.key == "Enter")
+        addTask(e);
+});
 menubarList.forEach(menu=>menu.addEventListener("click", (e)=>menuIndicator(e)));
+window.onload = function(){
+    taskInput.focus();
+}
 
 function menuIndicator(e){
     underLine.style.width = e.currentTarget.offsetWidth + "px";
     underLine.style.top = e.currentTarget.offsetTop + e.currentTarget.offsetHeight + "px";
     underLine.style.left = e.currentTarget.offsetLeft + "px";
     console.log(e.currentTarget.offsetTop, " : ", e.currentTarget.offsetHeight);
+
+    mode = e.target.id;
+    filterList = [];
+    if(mode == "item-all"){
+        render();
+    } else if(mode == "item-ongoing"){
+        for(let i=0;i<taskList.length;i++){
+            if(taskList[i].isComplete == false){
+                filterList.push(taskList[i]);
+            }
+        }
+        render();
+    }else if(mode == "item-done"){
+        for(let i=0;i<taskList.length;i++){
+            if(taskList[i].isComplete == true){
+                filterList.push(taskList[i]);
+            }
+        }
+        render();
+    }
+    console.log("menuIndicator :",filterList);
 }
 
 function addTask(){
+    if(taskInput.value == ''){
+        return;
+    }
     let task = {
         id: randomIDGenerate(),
         taskContent: taskInput.value,
@@ -37,28 +69,38 @@ function addTask(){
     taskInput.value = "";
     console.log("Task : ", taskList);
     render();
+    taskInput.focus();
 }
 
+//render=====render=====render=====render=====render//
 function render(){
-    let resultHTML = '';
+    let list = [];
+    if(mode == "item-all"){
+        list = taskList;
+    }else if(mode == "item-ongoing" || mode == "item-done"){
+        list = filterList;
+    }
 
-    for(let i=0;i<taskList.length;i++){
-        if(taskList[i].isComplete == true){
+    let resultHTML = '';
+    console.log("render_mode :", mode);
+    console.log("render_list :", list);
+    for(let i=0;i<list.length;i++){
+        if(list[i].isComplete == true){
             resultHTML += 
         `<div class="task">
-            <div class="task-content task-done">${taskList[i].taskContent}</div>
+            <div class="task-content task-done">${list[i].taskContent}</div>
             <div class="button-wrap">
-            <div class="fa-solid fa-arrow-rotate-left toggle-button" onclick="toggleComplete('${taskList[i].id}')"></div>
-            <div class="fa-solid fa-trash-can delete-button" onclick="deleteTask('${taskList[i].id}')"></div>
+            <div class="fa-solid fa-arrow-rotate-left toggle-button" onclick="toggleComplete('${list[i].id}')"></div>
+            <div class="fa-solid fa-trash-can delete-button" onclick="deleteTask('${list[i].id}')"></div>
             </div>
         </div>`
         } else {
             resultHTML += 
         `<div class="task">
-            <div class="task-content">${taskList[i].taskContent}</div>
+            <div class="task-content">${list[i].taskContent}</div>
             <div class="button-wrap">
-                <div class="fa-solid fa-circle-check toggle-button" onclick="toggleComplete('${taskList[i].id}')"></div>
-                <div class="fa-solid fa-trash-can delete-button" onclick="deleteTask('${taskList[i].id}')"></div>
+                <div class="fa-solid fa-circle-check toggle-button" onclick="toggleComplete('${list[i].id}')"></div>
+                <div class="fa-solid fa-trash-can delete-button" onclick="deleteTask('${list[i].id}')"></div>
             </div>
         </div>`
         }
@@ -67,11 +109,9 @@ function render(){
 }
 
 function toggleComplete(id){
-    console.log("toggleComplete id: ", id);
     for(let i=0;i<taskList.length;i++){
         if(taskList[i].id == id){
             taskList[i].isComplete = !taskList[i].isComplete;
-            console.log(taskList[i].className);
             break;
         }
     }

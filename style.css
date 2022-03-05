@@ -23,13 +23,14 @@ body{
 
 .task-tabs .task-item{
     padding: 1em;
+    cursor: pointer;
 }
 
 #under-line{
     height: 4px;
     background-color: red;
     position: absolute;
-    width: 0px;
+    width: 64px;
     left:0px;
     top:56px;
     padding:0px;
