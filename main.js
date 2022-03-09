@@ -35,6 +35,10 @@ function menuIndicator(e){
     console.log(e.currentTarget.offsetTop, " : ", e.currentTarget.offsetHeight);
 
     mode = e.target.id;
+    filtering(mode);
+}
+
+function filtering(mode){
     filterList = [];
     if(mode == "item-all"){
         render();
@@ -53,7 +57,7 @@ function menuIndicator(e){
         }
         render();
     }
-    console.log("menuIndicator :",filterList);
+    console.log("filtering :",filterList);
 }
 
 function addTask(){
@@ -115,7 +119,7 @@ function toggleComplete(id){
             break;
         }
     }
-    render();
+    filtering(mode);
     console.log("toggleComplete: ", taskList);
 }
 //class="fa-arrow-rotate-left"
@@ -127,7 +131,7 @@ function deleteTask(id){
             break;
         }
     }
-    render();
+    filtering(mode);
     console.log("deleteTask: ", taskList);
 }
 
